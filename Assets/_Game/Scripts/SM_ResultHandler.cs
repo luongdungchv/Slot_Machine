@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SM_ResultHandler : MonoBehaviour
@@ -20,9 +21,29 @@ public class SM_ResultHandler : MonoBehaviour
         res.Add(pyramidResultt);
         res.Add(reversePyramidResult);
         
+        Debug.Log(bottomLineResult.itemCoordinates);
+
         return res;
     }
     private ProfitResult TryHandleFirstLine(List<List<int>> result){
+        int item = result[0][2];
+        var list = new List<(int, int)>();
+        
+        int index = 0;
+        foreach(var col in result){
+            list.Add((index, 2));
+            if(col[2] != item){
+                return new ProfitResult();
+            }
+            index++;
+        }
+        
+        return new ProfitResult(){
+            multiplier = 1.2f,
+            itemCoordinates = list
+        };
+    }
+    private ProfitResult TryHandleBottomLine(List<List<int>> result){
         int item = result[0][0];
         var list = new List<(int, int)>();
         
@@ -40,7 +61,7 @@ public class SM_ResultHandler : MonoBehaviour
             itemCoordinates = list
         };
     }
-    private ProfitResult TryHandleBottomLine(List<List<int>> result){
+    private ProfitResult TryHandleMidLine(List<List<int>> result){
         int item = result[0][1];
         var list = new List<(int, int)>();
         
@@ -48,24 +69,6 @@ public class SM_ResultHandler : MonoBehaviour
         foreach(var col in result){
             list.Add((index, 1));
             if(col[1] != item){
-                return new ProfitResult();
-            }
-            index++;
-        }
-        
-        return new ProfitResult(){
-            multiplier = 1.2f,
-            itemCoordinates = list
-        };
-    }
-    private ProfitResult TryHandleMidLine(List<List<int>> result){
-        int item = result[0][2];
-        var list = new List<(int, int)>();
-        
-        int index = 0;
-        foreach(var col in result){
-            list.Add((index, 2));
-            if(col[2] != item){
                 return new ProfitResult();
             }
             index++;

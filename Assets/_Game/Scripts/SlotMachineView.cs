@@ -41,7 +41,21 @@ public class SlotMachineView : MonoBehaviour
             i++;
         }
     }
-    public void PlayJackpotAnimation(List<ProfitResult> profitResult){
-        
+    public void PlayJackpotAnimation(List<ProfitResult> profitResult, int scrollTurn, int turnIncrement){
+        int index = 0;
+        IEnumerator IEAnimation(){
+            while(index < profitResult.Count){
+                if(profitResult[index].itemCoordinates == null){
+                    index++;
+                    continue;
+                }
+                foreach(var (c, r) in profitResult[index].itemCoordinates){
+                    columnList[c].PlayItemAnimation(scrollTurn + 3 + turnIncrement * c + r);
+                }
+                index++;
+                yield return new WaitForSeconds(1);
+            }
+        }
+        StartCoroutine(IEAnimation());
     }
 }
