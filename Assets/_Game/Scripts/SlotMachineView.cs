@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Linq;
+using UnityEngine.Events;
 
 public class SlotMachineView : MonoBehaviour
 {
     [SerializeField] private SlotMachine presenter;
     [SerializeField] private List<SlotMachineColumn> columnList;
+    [SerializeField] private Transform darkZone;
     [SerializeField] private float moveLength, inertia, moveBackDuration;
     
     private List<Queue<Image>> columnQueueList;
@@ -34,27 +36,35 @@ public class SlotMachineView : MonoBehaviour
             var targetPos = -moveLength * turn;
             
             var sequence = DOTween.Sequence();
-            sequence.Append(colRect.DOAnchorPosY(targetPos - inertia, duration * turn).SetEase(Ease.Linear));
+            sequence.Append(colRect.DOAnchorPosY(targetPos - inertia, duration * turn).SetEase(Ease.Linear).OnComplete(() => SoundController.Instance.PlayOneShot(SFXEnum.SM_CellStop)));
             sequence.Append(colRect.DOAnchorPosY(targetPos, moveBackDuration).SetEase(Ease.Linear));
             
             col.SetImageSprites(colItems[i].Select(x => presenter.GetItemSprite(x)).ToList());
             i++;
         }
     }
-    public void PlayJackpotAnimation(List<ProfitResult> profitResult, int scrollTurn, int turnIncrement){
+    public void PlayJackpotAnimation(List<ProfitResult> profitResult, int scrollTurn, int turnIncrement, UnityAction onComplete = null){
         int index = 0;
+        
         IEnumerator IEAnimation(){
+            yield return new WaitForSeconds(this.moveBackDuration);
+            darkZone.gameObject.SetActive(true);
             while(index < profitResult.Count){
                 if(profitResult[index].itemCoordinates == null){
                     index++;
                     continue;
                 }
                 foreach(var (c, r) in profitResult[index].itemCoordinates){
-                    columnList[c].PlayItemAnimation(scrollTurn + 3 + turnIncrement * c + r);
+                    columnList[c].PlayItemAnimation(scrollTurn + 3 + turnIncrement * c + r, this.darkZone);
                 }
+                presenter.TriggerWin(profitResult[index].multiplier);
+                SoundController.Instance.PlayOneShot(SFXEnum.SM_Win);
                 index++;
                 yield return new WaitForSeconds(1);
             }
+            
+            onComplete?.Invoke();
+            darkZone.gameObject.SetActive(false);
         }
         StartCoroutine(IEAnimation());
     }

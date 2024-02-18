@@ -9,6 +9,7 @@ public class SlotMachine : Sirenix.OdinInspector.SerializedMonoBehaviour
     [SerializeField] private SlotMachineModel model;
     [SerializeField] private SlotMachineView view;
     [SerializeField] private SM_ResultHandler resultHandler;
+    [SerializeField] private UIController uiController;
     [SerializeField] private bool isForceResult;
     [SerializeField, ShowIf("isForceResult")] private List<List<int>> forcedResult;
     
@@ -27,6 +28,11 @@ public class SlotMachine : Sirenix.OdinInspector.SerializedMonoBehaviour
     
     public void StartScrolling(){
         if(IsScrolling) return;
+        if(uiController.CurrentBalance < uiController.CurrentBet) return;
+
+        uiController.ReduceBalanceWithBet();
+
+        SoundController.Instance.PlayOneShot(SFXEnum.SM_LeverPull);
         
         var (result, columnItems) = model.GenerateResult(column, row, scrollTurn, turnIncrement, isForceResult ? forcedResult : null);
         var profitResult = resultHandler.HandleResult(result);
@@ -36,9 +42,11 @@ public class SlotMachine : Sirenix.OdinInspector.SerializedMonoBehaviour
         var totalDuration = durationPerTurn * (scrollTurn + row + turnIncrement * column);
         IsScrolling = true;
         DL.Utils.CoroutineUtils.Invoke(this, () =>{
-             this.IsScrolling = false;
-             view.PlayJackpotAnimation(profitResult, this.scrollTurn, this.turnIncrement);
+             view.PlayJackpotAnimation(profitResult, this.scrollTurn, this.turnIncrement, () => this.IsScrolling = false);
         }, totalDuration);
     }
     
+    public void TriggerWin(float multiplier){
+        this.uiController.HandleWinResult(multiplier);
+    }
 }

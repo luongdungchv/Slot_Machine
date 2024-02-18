@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,14 +31,26 @@ public class SlotMachineColumn : MonoBehaviour
             itemImages[i].sprite = spriteList[i];
         }
     }
-    public void PlayItemAnimation(int index){
-        Debug.Log(index);
+    public void PlayItemAnimation(int index, Transform darkZone){
         var fx = fxQueue.Dequeue();
         fxQueue.Enqueue(fx);
+
         fx.GetComponent<RectTransform>().anchoredPosition = itemImages[index].GetComponent<RectTransform>().anchoredPosition;
+
         fx.gameObject.SetActive(true);
-        fx.GetComponent<UIParticleSystem>().StartParticleEmission();
-        DL.Utils.CoroutineUtils.Invoke(this, () => fx.gameObject.SetActive(false), fxDuration);
+
+        fx.transform.SetParent(darkZone);
+        itemImages[index].transform.SetParent(darkZone);
+
+        var sequence = DOTween.Sequence();
+        sequence.Append(itemImages[index].transform.DOScale(Vector3.one * 1.3f, fxDuration / 3f));
+        sequence.Append(itemImages[index].transform.DOScale(Vector3.one, fxDuration / 3f));
+
+        DL.Utils.CoroutineUtils.Invoke(this, () => {
+            fx.gameObject.SetActive(false);
+            fx.transform.SetParent(this.transform);
+            itemImages[index].transform.SetParent(this.transform);
+        }, fxDuration);
     }
     [Sirenix.OdinInspector.Button]
     private void Test(){

@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "n\xFAt_0"
+      name: panel_balance
       rect:
         serializedVersion: 2
         x: 113
@@ -138,7 +138,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "n\xFAt_1"
+      name: btn_spin
       rect:
         serializedVersion: 2
         x: 332
@@ -180,11 +180,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "n\xFAt_3"
+      name: panel_win
       rect:
         serializedVersion: 2
-        x: 101
-        y: 563
+        x: 106
+        y: 561
         width: 437
         height: 153
       alignment: 0
@@ -201,7 +201,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "n\xFAt_4"
+      name: panel_bet_amount
       rect:
         serializedVersion: 2
         x: 577
@@ -222,7 +222,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "n\xFAt_11"
+      name: btn_plus
       rect:
         serializedVersion: 2
         x: 636
@@ -264,7 +264,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "n\xFAt_5"
+      name: btn_maxbet
       rect:
         serializedVersion: 2
         x: 45
@@ -285,10 +285,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "n\xFAt_6"
+      name: btn_autospin
       rect:
         serializedVersion: 2
-        x: 45
+        x: 47
         y: 145
         width: 444
         height: 172
@@ -306,7 +306,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "n\xFAt_7"
+      name: btn_minus
       rect:
         serializedVersion: 2
         x: 599
@@ -337,10 +337,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "n\xFAt_0": -764585492
-      "n\xFAt_1": -1408559141
+      btn_autospin: -889393488
+      btn_maxbet: 1876665625
+      btn_minus: 960794202
+      btn_plus: -1723373429
+      btn_spin: -1408559141
       "n\xFAt_10": -1356148478
-      "n\xFAt_11": -1723373429
       "n\xFAt_12": -614898278
       "n\xFAt_13": -355979080
       "n\xFAt_14": -1522051632
@@ -351,13 +353,11 @@ TextureImporter:
       "n\xFAt_19": -1628130097
       "n\xFAt_2": 1381026260
       "n\xFAt_20": 323650358
-      "n\xFAt_3": 1530331644
-      "n\xFAt_4": -2079200592
-      "n\xFAt_5": 1876665625
-      "n\xFAt_6": -889393488
-      "n\xFAt_7": 960794202
       "n\xFAt_8": -2082527290
       "n\xFAt_9": 645584851
+      panel_balance: -764585492
+      panel_bet_amount: -2079200592
+      panel_win: 1530331644
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
